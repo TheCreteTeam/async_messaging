@@ -2,6 +2,8 @@ using Azure.Identity;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi.Models;
+using WebApplication1.Services;
+using WebApplication1.Services.Definitions;
 using WebApplication1.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -96,6 +98,10 @@ builder.Services.AddHsts(options =>
 });
 
 builder.Services.AddHttpContextAccessor();
+
+
+// Services
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 var app = builder.Build();
 

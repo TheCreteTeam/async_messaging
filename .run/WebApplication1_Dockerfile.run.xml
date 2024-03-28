@@ -21,12 +21,36 @@
               <option name="value" value="/https/aspnetapp.pfx" />
             </DockerEnvVarImpl>
             <DockerEnvVarImpl>
-              <option name="name" value="DEVELOPER_MODE" />
-              <option name="value" value="true" />
-            </DockerEnvVarImpl>
-            <DockerEnvVarImpl>
               <option name="name" value="ASPNETCORE_URLS" />
               <option name="value" value="https://+;http://+" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="AZURE_CLIENT_ID" />
+              <option name="value" value="5546ea8f-28d2-4a8f-af5c-efa637586026" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="AZURE_CLIENT_SECRET" />
+              <option name="value" value="jSM8Q~h0HS-N_qDyt.ynunbaX4T..V7iwWv_QbWT" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="AZURE_STORAGE_CONNECTION_STRING" />
+              <option name="value" value="" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="AZURE_STORAGE_QUEUE_NAME" />
+              <option name="value" value="queue01" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="AZURE_STORAGE_URI" />
+              <option name="value" value="https://teststoragex01.queue.core.windows.net/queue01" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="AZURE_TENANT_ID" />
+              <option name="value" value="6498607f-c00c-41cb-a637-097c2b0afebe" />
+            </DockerEnvVarImpl>
+            <DockerEnvVarImpl>
+              <option name="name" value="DEVELOPER_MODE" />
+              <option name="value" value="true" />
             </DockerEnvVarImpl>
           </list>
         </option>
@@ -52,6 +76,10 @@
             <DockerVolumeBindingImpl>
               <option name="containerPath" value="/https/" />
               <option name="hostPath" value="C:\Users\kveni\.aspnet\https" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/root/azure" />
+              <option name="hostPath" value="C:\Users\kveni\.azure\" />
             </DockerVolumeBindingImpl>
           </list>
         </option>
