@@ -140,7 +140,9 @@ app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("X-Frame-Options", "DENY");
     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+    bool useHeaderSTS = Environment.GetEnvironmentVariable("SET_HEADER_STS") == "true";
+    if (useHeaderSTS)
+        context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
     await next();
 });
 // app.UseHttpsRedirection();
