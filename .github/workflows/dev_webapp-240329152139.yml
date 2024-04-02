@@ -28,8 +28,7 @@ jobs:
           dotnet nuget add source ${{ env.AZURE_ARTIFACTS_FEED_URL }} \
           --name azure \
           --username az \
-          --password ${{ secrets.AZURE_DEVOPS_TOKEN }} \
-          --store-password-in-clear-textdotnet 
+          --password ${{ secrets.AZURE_DEVOPS_TOKEN }}
           dotnet restore
           build --configuration Release --no-restore
 
