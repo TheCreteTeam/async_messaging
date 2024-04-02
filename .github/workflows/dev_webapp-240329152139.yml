@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - dev
+    paths-ignore:
+      - 'AsyncMessagingCommon/**'
   workflow_dispatch:
 env:
   AZURE_ARTIFACTS_FEED_URL: https://pkgs.dev.azure.com/TheCreteTeam/6733bd99-93cd-4992-933d-26bd2a613104/_packaging/async_mesaging_common/nuget/v3/index.json
