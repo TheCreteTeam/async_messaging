@@ -7,8 +7,11 @@ on:
   push:
     branches:
       - dev
+    paths-ignore:
+      - 'AsyncMessagingCommon/**'
   workflow_dispatch:
-
+env:
+  AZURE_ARTIFACTS_FEED_URL: https://pkgs.dev.azure.com/TheCreteTeam/6733bd99-93cd-4992-933d-26bd2a613104/_packaging/async_mesaging_common/nuget/v3/index.json
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,6 +24,16 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
+
+      - name: Build with dotnet
+        run: |
+          dotnet nuget add source ${{ env.AZURE_ARTIFACTS_FEED_URL }} \
+          --name azure \
+          --username az \
+          --password ${{ secrets.AZURE_DEVOPS_TOKEN }} \
+          --store-password-in-clear-text
+          dotnet restore
+          dotnet build --configuration Release --no-restore
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
