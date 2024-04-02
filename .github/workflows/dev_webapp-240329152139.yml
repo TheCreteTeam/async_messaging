@@ -31,7 +31,7 @@ jobs:
           --password ${{ secrets.AZURE_DEVOPS_TOKEN }} \
           --store-password-in-clear-text
           dotnet restore
-          build --configuration Release --no-restore
+          dotnet build --configuration Release --no-restore
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
