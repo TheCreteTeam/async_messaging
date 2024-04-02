@@ -1,10 +1,13 @@
 using Azure.Identity;
+using Coravel;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi.Models;
 using WebApplication1.Services;
 using WebApplication1.Services.Definitions;
 using WebApplication1.Validation;
+using WebApplication1.WolverineDemo;
+using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,6 +105,10 @@ builder.Services.AddHttpContextAccessor();
 
 // Services
 builder.Services.AddScoped<IMessageService, MessageService>();
+// Coravel Scheduler
+builder.Services.AddScheduler();
+// Wolverine
+builder.Host.UseWolverine();
 
 var app = builder.Build();
 
@@ -140,10 +147,23 @@ app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("X-Frame-Options", "DENY");
     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-    bool useHeaderSTS = Environment.GetEnvironmentVariable("SET_HEADER_STS") == "true";
-    if (useHeaderSTS)
+    bool useHeaderSts = Environment.GetEnvironmentVariable("SET_HEADER_STS") == "true";
+    if (useHeaderSts)
         context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
     await next();
 });
-// app.UseHttpsRedirection();
+ 
+app.Services.UseScheduler(scheduler =>
+{
+    scheduler.Schedule(
+            () => Console.WriteLine("Every minute during the week.")
+        )
+        .EveryMinute()
+        .Weekday();
+
+    // Every 1 minutes produce a message
+    scheduler.ScheduleWithParams<BgPublisher>()
+        .Cron("*/1 * * * *");
+});
+
 app.Run();

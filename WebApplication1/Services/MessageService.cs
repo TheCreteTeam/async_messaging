@@ -35,8 +35,27 @@ public class MessageService: IMessageService
         // QueueClient queueClient = new QueueClient(connectionString, queueName);
         
         // 2. URI - passwordless
-        QueueClient queueClient = new QueueClient(new Uri(queueUri), new DefaultAzureCredential());
-        return queueClient;
+        var options = new DefaultAzureCredentialOptions
+        {    
+            Diagnostics =
+            {
+                LoggedHeaderNames = { "x-ms-request-id" },
+                LoggedQueryParameters = { "api-version" },
+                IsLoggingContentEnabled = true
+            },
+            ExcludeManagedIdentityCredential = true,
+            ExcludeVisualStudioCodeCredential = true
+        };
+        if (queueUri != null)
+        {
+            QueueClient queueClient = new QueueClient(new Uri(queueUri), new DefaultAzureCredential(options));
+            return queueClient;
+        }
+        else
+        {
+            QueueClient queueClient = new QueueClient(connectionString, queueName);
+            return queueClient;
+        }
     }
 
     private async Task InsertMessageAsync(QueueClient theQueue, string newMessage)
@@ -45,7 +64,9 @@ public class MessageService: IMessageService
         {
             _logger.LogInformation("The queue was created.");
         }
-        await theQueue.SendMessageAsync(newMessage, default, TimeSpan.FromSeconds(-1), default);
+        // var queueMessage = new CloudQueueMessage(newMessage);
+        var receipt = await theQueue.SendMessageAsync(newMessage, default, TimeSpan.FromSeconds(-1), default);
+        _logger.LogInformation("The message was added to the queue, id: {0}", receipt.Value.MessageId);
     }
     
     // Below code should be used by a client task
