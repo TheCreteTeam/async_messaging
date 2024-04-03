@@ -2,7 +2,8 @@ name: Delete old workflow runs
 #on:
 #  schedule:
 #    - cron: '0 0 * * *'  # Runs every day at midnight
-
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 on:
   workflow_dispatch:
     inputs:
@@ -23,13 +24,39 @@ on:
         description: 'Environment to run tests against'
         type: environment
         required: true
+
 jobs:
-  cleanup:
+  delete-workflow-runs:
     runs-on: ubuntu-latest
+    name: A demo job to delete workflow runs
     steps:
-      - name: Delete old runs
-        uses: marketplace/actions/delete-workflow-runs@v2.0.6
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Delete workflow runs
+        uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
+        id: delete-old-workflow-runs
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          retain_days: 1
+          repository: TheCreteTeam/async_messaging
+          #workflow: ".github/workflows/main.yml"
+          older-than-seconds: 7200
+          # The repository for which to delete workflow runs.
+          #repository: 
+          # The path to the workflow's .yml file.
+          #workflow: # optional
+          # Consider only the workflows older than the given number of seconds.
+          #older-than-seconds: # optional
+          # Consider only the workflows created before this date for deletion.
+          #created-before: # optional
+          # Returns someone's workflow runs. Use the login for the user who created the push associated with the check suite or workflow run.
+          #actor: # optional
+          # Returns workflow runs associated with a branch. Use the name of the branch of the push.
+          #branch: # optional
+          # Returns workflow run triggered by the event you specify. For example, push, pull_request or issue.
+          #event: # optional
+          # Returns workflow runs with the given status. Can be one of queued, in_progress, or completed.
+          #status: # optional
+          # Set to true to preview the changes made by this action without deleting any workflow runs.
+          #what-if: # optional
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
