@@ -7,17 +7,9 @@
         <IsPackable>true</IsPackable>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <PublishSingleFile>false</PublishSingleFile>
+        <OutputType>Library</OutputType>
+        <AssemblyName>AsyncMessagingCommon</AssemblyName>
+        <PackageId>AsyncMessagingCommon</PackageId>
     </PropertyGroup>
-<!--    <Target Name="PublishAndZip" AfterTargets="Publish">-->
-<!--        <ZipDirectory-->
-<!--                SourceDirectory="$(PublishDir)"-->
-<!--                DestinationFile="$(PublishDir)../publish.zip"-->
-<!--                Overwrite="true" />-->
-<!--    </Target>-->
-    <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
 
 </Project>
