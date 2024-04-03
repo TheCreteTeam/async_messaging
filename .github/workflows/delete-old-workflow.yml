@@ -34,29 +34,31 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Delete workflow runs
-        uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
         id: delete-old-workflow-runs
+        # You may pin to the exact commit or the version.
+        # uses: Mattraks/delete-workflow-runs@39f0bbed25d76b34de5594dceab824811479e5de
+        uses: Mattraks/delete-workflow-runs@v2.0.6
         with:
-          repository: TheCreteTeam/async_messaging
-          #workflow: ".github/workflows/main.yml"
-          older-than-seconds: 7200
-          # The repository for which to delete workflow runs.
-          #repository: 
-          # The path to the workflow's .yml file.
-          #workflow: # optional
-          # Consider only the workflows older than the given number of seconds.
-          #older-than-seconds: # optional
-          # Consider only the workflows created before this date for deletion.
-          #created-before: # optional
-          # Returns someone's workflow runs. Use the login for the user who created the push associated with the check suite or workflow run.
-          #actor: # optional
-          # Returns workflow runs associated with a branch. Use the name of the branch of the push.
-          #branch: # optional
-          # Returns workflow run triggered by the event you specify. For example, push, pull_request or issue.
-          #event: # optional
-          # Returns workflow runs with the given status. Can be one of queued, in_progress, or completed.
-          #status: # optional
-          # Set to true to preview the changes made by this action without deleting any workflow runs.
-          #what-if: # optional
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Authentication token
+          #token: # default is ${{ github.token }}
+          # Base API URL
+          #baseUrl: # optional, default is https://api.github.com
+          # Name of the repository
+          #repository: # default is ${{ github.repository }}
+          # Days-worth of runs to keep for each workflow
+          retain_days: 1 # default is 30
+          # Minimum runs to keep for each workflow
+          #keep_minimum_runs: # default is 6
+          # Name or filename of the workflow (if not set, all workflows are targeted)
+          #delete_workflow_pattern: # optional
+          # Filter workflows by state: active, deleted, disabled_fork, disabled_inactivity, disabled_manually
+          #delete_workflow_by_state_pattern: # optional
+          # Remove runs based on conclusion: action_required, cancelled, failure, skipped, success
+          #delete_run_by_conclusion_pattern: # optional
+          # Logs simulated changes, no deletions are performed
+          #dry_run: # optional
+          # If the workflow was triggered by a branch, the branch must be deleted before the workflow run is deleted as well.
+          #check_branch_existence: # optional
+          # If the run is linked to a pull request, the deletion is skipped.
+          #check_pullrequest_exist: # optional
+          
