@@ -3,6 +3,11 @@ using Coravel;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi.Models;
+using Paramore.Brighter;
+using Paramore.Brighter.Extensions.DependencyInjection;
+using Polly;
+using Polly.Registry;
+using WebApplication1.Handlers;
 using WebApplication1.Services;
 using WebApplication1.Services.Definitions;
 using WebApplication1.Validation;
@@ -45,6 +50,38 @@ else
             new Uri("https://keyvaulttesteiopa.vault.azure.net/keys/rsaTestKey/b3b1f20245e54da28519620975b19343"),
             new DefaultAzureCredential());
 }
+
+builder.Services.AddBrighter(options =>
+{
+    var retryPolicy = Policy.Handle<Exception>().WaitAndRetry(new[] 
+    { 
+        TimeSpan.FromMilliseconds(50), 
+        TimeSpan.FromMilliseconds(100), 
+        TimeSpan.FromMilliseconds(150) });
+    
+    var circuitBreakerPolicy = Policy.Handle<Exception>().CircuitBreaker(1, 
+        TimeSpan.FromMilliseconds(500));
+    
+    var retryPolicyAsync = Policy.Handle<Exception>()
+        .WaitAndRetryAsync(new[] { TimeSpan.FromMilliseconds(50), TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(150) });
+    
+    var circuitBreakerPolicyAsync = Policy.Handle<Exception>().CircuitBreakerAsync(1, TimeSpan.FromMilliseconds(500));
+    
+
+    var policyRegistry = new PolicyRegistry()
+    {
+        { CommandProcessor.RETRYPOLICY, retryPolicy },
+        { CommandProcessor.CIRCUITBREAKER, circuitBreakerPolicy },
+        { CommandProcessor.RETRYPOLICYASYNC, retryPolicyAsync },
+        { CommandProcessor.CIRCUITBREAKERASYNC, circuitBreakerPolicyAsync}
+    };
+    options.PolicyRegistry = policyRegistry;
+    options.HandlerLifetime = ServiceLifetime.Scoped;
+    options.CommandProcessorLifetime = ServiceLifetime.Scoped;
+    options.MapperLifetime = ServiceLifetime.Singleton;
+    options.TransformerLifetime = ServiceLifetime.Scoped;
+    options.RequestContextFactory= new InMemoryRequestContextFactory();
+}).AutoFromAssemblies(typeof(GetMessageHandler).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

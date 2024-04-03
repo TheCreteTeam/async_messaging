@@ -19,6 +19,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.25"/>
         <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.25" />
         <PackageReference Include="Microsoft.Identity.Web" Version="2.16.0" />
+        <PackageReference Include="Paramore.Brighter" Version="9.7.6" />
+        <PackageReference Include="Paramore.Brighter.Extensions.DependencyInjection" Version="9.7.6" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
@@ -31,6 +33,10 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AsyncMessagingCommon\AsyncMessagingCommon.csproj" />
     </ItemGroup>
 
 </Project>

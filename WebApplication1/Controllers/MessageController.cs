@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AsyncMessagingCommon.Commands;
+using Microsoft.AspNetCore.Mvc;
+using Paramore.Brighter;
 using WebApplication1.Services.Definitions;
 
 namespace WebApplication1.Controllers;
@@ -7,14 +9,16 @@ namespace WebApplication1.Controllers;
 [Route("[controller]")]
 public class MessageController : ControllerBase
 {
+    private readonly IAmACommandProcessor _commandProcessor;
     private readonly ILogger<MessageController> _logger;
     private readonly IMessageService _messageService;
     
-    public MessageController(IMessageService messageService, ILogger<MessageController> logger)
+    public MessageController(IMessageService messageService, IAmACommandProcessor commandProcessor, ILogger<MessageController> logger)
     {
         _messageService = messageService;
+        _commandProcessor = commandProcessor;
         _logger = logger;
-    } 
+    }
     
     [HttpPost("PostMessage")]
     public async ValueTask<ActionResult<string>> PostMessage(string? message)
@@ -32,7 +36,9 @@ public class MessageController : ControllerBase
     [HttpGet("GetMessage")]
     public async ValueTask<ActionResult<string>> GetMessage()
     {
-         var msg = await _messageService.RetrieveNextMessageAsync();
-         return Ok(msg);
+         var message = await _messageService.RetrieveNextMessageAsync();
+         var command = new GetMessageCommand(message);
+         await _commandProcessor.SendAsync(command);
+         return Ok(message);
     }
 }
