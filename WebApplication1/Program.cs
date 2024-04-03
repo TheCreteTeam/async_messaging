@@ -155,15 +155,17 @@ app.Use(async (context, next) =>
  
 app.Services.UseScheduler(scheduler =>
 {
-    scheduler.Schedule(
-            () => Console.WriteLine("Every minute during the week.")
-        )
-        .EveryMinute()
-        .Weekday();
+    // Sample schedule
+    //     scheduler.Schedule(
+    //         () => Console.WriteLine("Every minute during the week.")
+    //     )
+    //     .EveryMinute()
+    //     .Weekday();
 
-    // Every 1 minutes produce a message
+    // Default every 1 minutes produce a message 
+    var msgPublishCron = Environment.GetEnvironmentVariable("TEST_MESSAGE_PUBLISH_CRON");
     scheduler.ScheduleWithParams<BgPublisher>()
-        .Cron("*/1 * * * *");
+        .Cron(msgPublishCron ?? "*/1 * * * *");
 });
 
 app.Run();
