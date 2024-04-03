@@ -43,7 +43,7 @@ public class MessageService: IMessageService
                 LoggedQueryParameters = { "api-version" },
                 IsLoggingContentEnabled = true
             },
-            ExcludeManagedIdentityCredential = true,
+            // ExcludeManagedIdentityCredential = true,
             ExcludeVisualStudioCodeCredential = true
         };
         if (queueUri != null)
