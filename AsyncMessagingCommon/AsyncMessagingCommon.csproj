@@ -10,6 +10,7 @@
         <OutputType>Library</OutputType>
         <AssemblyName>AsyncMessagingCommon</AssemblyName>
         <PackageId>AsyncMessagingCommon</PackageId>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>

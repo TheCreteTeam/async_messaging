@@ -64,7 +64,7 @@ public class MessageService: IMessageService
         {
             _logger.LogInformation("The queue was created.");
         }
-        // var queueMessage = new CloudQueueMessage(newMessage);
+
         var receipt = await theQueue.SendMessageAsync(newMessage, default, TimeSpan.FromSeconds(-1), default);
         _logger.LogInformation("The message was added to the queue, id: {0}", receipt.Value.MessageId);
     }
