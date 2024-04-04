@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
+using Coravel.Events.Interfaces;
 using WebApplication1.Services.Definitions;
 
 namespace WebApplication1.Services;
@@ -9,10 +10,13 @@ public class MessageService: IMessageService
 {
 
     private readonly ILogger<MessageService> _logger;
+    private IDispatcher _dispatcher;
     
-    public MessageService(ILogger<MessageService> logger)
+    
+    public MessageService(ILogger<MessageService> logger, IDispatcher dispatcher)
     {
         _logger = logger;
+        _dispatcher = dispatcher;
     }
     
     public async Task SendMessageToAzureStorageQueue(string message)
@@ -67,6 +71,7 @@ public class MessageService: IMessageService
 
         var receipt = await theQueue.SendMessageAsync(newMessage, default, TimeSpan.FromSeconds(-1), default);
         _logger.LogInformation("The message was added to the queue, id: {0}", receipt.Value.MessageId);
+        await _dispatcher.Broadcast(new PostCreated(message: newMessage));
     }
     
     // Below code should be used by a client task

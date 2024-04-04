@@ -1,5 +1,6 @@
 using Azure.Identity;
 using Coravel;
+using Coravel.Events.Interfaces;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi.Models;
@@ -85,6 +86,7 @@ builder.Services.AddBrighter(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEvents();
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo
@@ -142,6 +144,7 @@ builder.Services.AddHttpContextAccessor();
 
 // Services
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<PostListener>();
 // Coravel Scheduler
 builder.Services.AddScheduler();
 // Wolverine
@@ -204,5 +207,12 @@ app.Services.UseScheduler(scheduler =>
     scheduler.ScheduleWithParams<BgPublisher>()
         .Cron(msgPublishCron ?? "*/1 * * * *");
 });
+
+var provider = app.Services;
+IEventRegistration registration = provider.ConfigureEvents();
+registration
+    .Register<PostCreated>()
+    .Subscribe<PostListener>();
+
 
 app.Run();
