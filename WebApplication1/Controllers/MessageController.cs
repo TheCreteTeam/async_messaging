@@ -49,6 +49,7 @@ public class MessageController : ControllerBase
         // save to db context
         _dbContext.AppMessages.Add(messageEntity);
         await _dbContext.SaveChangesAsync();
+        _logger.LogInformation("Message saved to db context.");
         
         await _bus.Publish(new CreateMessage(messageEntity));
         
