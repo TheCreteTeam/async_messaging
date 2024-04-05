@@ -15,6 +15,7 @@
         <PackageReference Include="Azure.Storage.Queues" Version="12.17.1" />
         <PackageReference Include="Coravel" Version="5.0.3" />
         <PackageReference Include="FluentValidation" Version="11.8.1" />
+        <PackageReference Include="MassTransit" Version="8.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.25"/>
         <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.25" />

@@ -14,6 +14,6 @@ public class CreateMessageHandler
     
     public void Handle(CreateMessage message)
     {
-        _logger.LogInformation($"Message received: {message.Message}");
+        _logger.LogInformation($"Message received: {message.AppMessage.Text}");
     }
 }

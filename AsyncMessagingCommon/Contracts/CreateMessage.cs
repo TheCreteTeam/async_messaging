@@ -1,3 +1,4 @@
-﻿namespace AsyncMessagingCommon.Contracts;
+﻿using AsyncMessagingCommon.Entities;
 
-public record CreateMessage(string? Message);
+namespace AsyncMessagingCommon.Contracts;
+public record CreateMessage(AppMessage AppMessage);

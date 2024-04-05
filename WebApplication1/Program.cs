@@ -1,6 +1,8 @@
+using System.Reflection;
 using Azure.Identity;
 using Coravel;
 using Coravel.Events.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi.Models;
@@ -147,6 +149,24 @@ builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<PostListener>();
 // Coravel Scheduler
 builder.Services.AddScheduler();
+// MassTransit
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+    // x.SetInMemorySagaRepositoryProvider();
+
+    var entryAssembly = Assembly.GetEntryAssembly();
+
+    x.AddConsumers(entryAssembly);
+    // x.AddSagaStateMachines(entryAssembly);
+    // x.AddSagas(entryAssembly);
+    // x.AddActivities(entryAssembly);
+
+    x.UsingInMemory((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 // Wolverine
 builder.Host.UseWolverine();
 

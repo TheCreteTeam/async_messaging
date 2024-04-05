@@ -1,4 +1,5 @@
 ﻿using AsyncMessagingCommon.Contracts;
+using AsyncMessagingCommon.Entities;
 using Coravel.Invocable;
 using Wolverine;
 
@@ -31,6 +32,11 @@ public class BgPublisher: IInvocable
     {
         _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
         string randomString = Guid.NewGuid().ToString();
-        await _messageBus.SendAsync(new CreateMessage("Hello from BgPublisher, guid: " + randomString));
+        AppMessage message = new()
+        {
+            Text = "Hello from BgPublisher, guid: " + randomString,
+            TimeStamp = DateTime.Now
+        };
+        await _messageBus.SendAsync(new CreateMessage(message));
     }
 }

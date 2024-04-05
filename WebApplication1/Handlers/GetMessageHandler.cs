@@ -1,4 +1,5 @@
 ﻿using AsyncMessagingCommon.Commands;
+using MassTransit;
 using Paramore.Brighter;
 using Paramore.Brighter.Policies.Attributes;
 
@@ -13,6 +14,7 @@ namespace WebApplication1.Handlers
             _logger = logger;
         }
 
+        // Brighter
         [UsePolicyAsync(step: 1, policy: CommandProcessor.RETRYPOLICYASYNC)]
         public override async Task<GetMessageCommand> HandleAsync(GetMessageCommand command, CancellationToken cancellationToken = default)
         {
