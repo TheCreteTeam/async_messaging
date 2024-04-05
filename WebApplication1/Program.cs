@@ -93,7 +93,7 @@ builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "v1.0.8",
+        Version = "v1.0.2",
         Title = "Test API",
         Description = "A test ASP.NET Core Web API",
         TermsOfService = new Uri("https://example.com/terms"),
