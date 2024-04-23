@@ -38,7 +38,7 @@ jobs:
 
       - task: AzureWebAppContainer@1
         inputs:
-          azureSubscription: 'AzureSubscription'
+          azureSubscription: 'AzureSubscriptionConnectionName'
           appName: '$(PL_BACK_APP_NAME)'
           containers: 'Container$(PL_BACK_ENVIRONMENT).azurecr.io/DevRepository:latest'
 
