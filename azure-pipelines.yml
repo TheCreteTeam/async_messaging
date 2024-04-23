@@ -28,6 +28,7 @@ jobs:
           repository: 'DevRepository'
           command: 'buildAndPush'
           Dockerfile: '**/Dockerfile'
+          buildContext: '.'
           tags: 'latest'
 
       - task: AzureWebAppContainer@1
