@@ -1,0 +1,54 @@
+﻿# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+name: Azure Static Web Apps CI/CD
+variables:
+  - name: environment_variable_group
+    ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
+      value: DevVariableGroup
+
+  - name: azure_container_registry
+    ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
+      value: 'DevContainerRegistry'
+
+resources:
+  - repo: self
+jobs:
+  - job: TestRuntimeVars
+    steps:
+      - script: |
+          for var in $(compgen -e); do
+            echo $var ${!var};
+          done
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      - group: ${{variables.environment_variable_group}}
+    steps:
+      - task: Docker@2
+        displayName: Build and push an image to container registry
+        inputs:
+          containerRegistry: $(azure_container_registry)
+          repository: 'DevRepository'
+          command: 'buildAndPush'
+          Dockerfile: '**/Dockerfile'
+          tags: 'latest'
+
+      - task: AzureWebAppContainer@1
+        inputs:
+          azureSubscription: 'AzureSubscription'
+          appName: '$(PL_BACK_APP_NAME)'
+          containers: 'Container$(PL_BACK_ENVIRONMENT).azurecr.io/DevRepository:latest'
+
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: |
+            #!/bin/bash
+            
+            sudo apt-get update
+            sudo apt-get install -y mailutils
+            
+            echo "back-end is deployed @ $(Build.SourceBranch) please check." | mail -s "New deployment at the Back-End: $(Build.SourceBranch) " kvenizelos@live.com
