@@ -14,12 +14,12 @@ variables:
 resources:
   - repo: self
 jobs:
-  - job: TestRuntimeVars
-    steps:
-      - script: |
-          for var in $(compgen -e); do
-            echo $var ${!var};
-          done
+  # - job: TestRuntimeVars
+  #   steps:
+  #     - script: |
+  #         for var in $(compgen -e); do
+  #           echo $var ${!var};
+  #         done
   - job: Build
     displayName: Build
     pool:
