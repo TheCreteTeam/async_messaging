@@ -9,7 +9,7 @@ variables:
 
   - name: azure_container_registry
     ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
-      value: 'DevContainerRegistry1'
+      value: 'ContainerRegistryConnection'
 
 resources:
   - repo: self
