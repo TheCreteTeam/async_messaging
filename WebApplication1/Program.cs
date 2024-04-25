@@ -202,6 +202,9 @@ string asciiArt = @"
     ";
 logger.LogInformation(asciiArt);
 
+var testConfVar = Environment.GetEnvironmentVariable("TEST_CONF_VAR");
+logger.LogInformation($"TEST_CONF_VAR: {testConfVar}");
+
 app.UseHsts();
 app.Use(async (context, next) =>
 {
