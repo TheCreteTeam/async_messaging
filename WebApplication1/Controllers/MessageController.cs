@@ -60,6 +60,10 @@ public class MessageController : ControllerBase
     [HttpGet("GetMessage")]
     public async ValueTask<ActionResult<string>> GetMessage()
     {
+        var testConfVar = Environment.GetEnvironmentVariable("TEST_CONF_VAR");
+        _logger.LogInformation($"TEST_CONF_VAR: {testConfVar}");
+        
+        
          var message = await _messageService.RetrieveNextMessageAsync();
          var command = new GetMessageCommand(message);
          await _commandProcessor.SendAsync(command);
