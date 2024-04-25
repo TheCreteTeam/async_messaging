@@ -33,7 +33,7 @@ jobs:
           ConfigurationFile: 'app_config.json'
           azureSubscription: 'AzureSubscriptionConnectionName'
           AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
-          Depth: '1'
+          Depth: '2'
           Prefix: 'test-prefix_'
           Strict: false
       # - task: AzureAppConfigurationPush@6
