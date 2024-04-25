@@ -27,6 +27,11 @@ jobs:
     variables:
       - group: ${{variables.environment_variable_group}}
     steps:
+      - task: AzureAppConfiguration@7
+        inputs:
+          azureSubscription: 'AzureSubscriptionConnectionName'
+          AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
+          KeyFilter: '*'
       - task: Docker@2
         displayName: Build and push an image to container registry
         inputs:
