@@ -27,15 +27,15 @@ jobs:
     variables:
       - group: ${{variables.environment_variable_group}}
     steps:
-      - task: AzureAppConfigurationPush@6
-        inputs:
-          azureSubscription: 'AzureSubscriptionConnectionName'
-          AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
-          ConfigurationFile: 'app_config.json'
-          Separator: ':'
-          Depth: '2'
-          Prefix: '3_'
-          Strict: false'
+      # - task: AzureAppConfigurationPush@6
+      #   inputs:
+      #     azureSubscription: 'AzureSubscriptionConnectionName'
+      #     AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
+      #     ConfigurationFile: 'app_config.json'
+      #     Separator: ':'
+      #     Depth: '2'
+      #     Prefix: '3_'
+      #     Strict: false'
       # - task: AzureAppConfigurationPush@6
       #   inputs:
       #     ConfigurationFile: '
@@ -44,12 +44,12 @@ jobs:
       #     Depth: '2'
       #     Prefix: 'test-prefix_'
       #     Strict: false
-      # - task: AzureAppConfigurationPush@6
-      #   inputs:
-      #     azureSubscription: 'AzureSubscriptionConnectionName'
-      #     AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
-      #     ConfigurationFile: 'app_config.json'
-      #     Strict: false      
+      - task: AzureAppConfigurationPush@6
+        inputs:
+          azureSubscription: 'AzureSubscriptionConnectionName'
+          AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
+          ConfigurationFile: 'app_config.json'
+          Strict: false
       # - task: AzureAppConfiguration@7
       #   inputs:
       #     azureSubscription: 'AzureSubscriptionConnectionName'
