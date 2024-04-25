@@ -1,8 +1,3 @@
-{
-  "AppConfig": {
-    "Setting1": "Value1",
-    "Setting2": "Value2",
-    "Setting3": "Value3"
-  },
-  "TestEnvVar": "Test value"
+{ 
+  "TEST_CONF_VAR": "conf value test 12345 updated3"
 }
