@@ -30,6 +30,7 @@ jobs:
     
       - task: AzureAppConfigurationPush@6
         inputs:
+          ConfigurationFile: 'app_config.json'
           azureSubscription: 'AzureSubscriptionConnectionName'
           AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
           Depth: '1'
