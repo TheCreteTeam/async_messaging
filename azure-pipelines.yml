@@ -69,7 +69,7 @@ jobs:
         inputs:
           azureSubscription: 'AzureSubscriptionConnectionName'
           appName: '$(PL_BACK_APP_NAME)'
-          containers: 'DevContainerRegistry1.azurecr.io/DevRepository:latest'
+          containers: 'devcontainerregistry1.azurecr.io/devrepository:latest'
 
       - task: Bash@3
         inputs:
