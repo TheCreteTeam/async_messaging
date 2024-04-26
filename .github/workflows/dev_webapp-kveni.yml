@@ -32,8 +32,8 @@ jobs:
           --username az \
           --password ${{ secrets.AZURE_DEVOPS_TOKEN }} \
           --store-password-in-clear-text
-          dotnet restore WebApplication1\WebApplication1.csproj
-          dotnet build --configuration Release --no-restore WebApplication1\WebApplication1.csproj
+          dotnet restore WebApplication1/WebApplication1.csproj
+          dotnet build --configuration Release --no-restore WebApplication1/WebApplication1.csproj
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
