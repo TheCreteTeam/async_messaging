@@ -202,6 +202,14 @@ string asciiArt = @"
     ";
 logger.LogInformation(asciiArt);
 
+var sdkVersion = System.Reflection.Assembly
+    .GetEntryAssembly()?
+    .GetCustomAttribute<System.Reflection.AssemblyFileVersionAttribute>()?
+    .Version;
+
+logger.LogInformation($"SDK Version: {sdkVersion}");
+
+
 var testConfVar = Environment.GetEnvironmentVariable("TEST_CONF_VAR");
 logger.LogInformation($"TEST_CONF_VAR: {testConfVar}");
 
