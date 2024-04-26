@@ -27,15 +27,15 @@ jobs:
     variables:
       - group: ${{variables.environment_variable_group}}
     steps:
-      - task: AzureAppConfigurationPush@6
-        inputs:
-          azureSubscription: 'AzureSubscriptionConnectionName'
-          AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
-          ConfigurationFile: 'app_config.json'
-          Separator: ':'
-          Depth: '2'
-          Prefix: '3_'
-          Strict: false'
+      # - task: AzureAppConfigurationPush@6
+      #   inputs:
+      #     azureSubscription: 'AzureSubscriptionConnectionName'
+      #     AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
+      #     ConfigurationFile: 'app_config.json'
+      #     Separator: ':'
+      #     Depth: '2'
+      #     Prefix: '3_'
+      #     Strict: false'
       # - task: AzureAppConfigurationPush@6
       #   inputs:
       #     ConfigurationFile: '
@@ -44,12 +44,12 @@ jobs:
       #     Depth: '2'
       #     Prefix: 'test-prefix_'
       #     Strict: false
-      # - task: AzureAppConfigurationPush@6
-      #   inputs:
-      #     azureSubscription: 'AzureSubscriptionConnectionName'
-      #     AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
-      #     ConfigurationFile: 'app_config.json'
-      #     Strict: false      
+      - task: AzureAppConfigurationPush@6
+        inputs:
+          azureSubscription: 'AzureSubscriptionConnectionName'
+          AppConfigurationEndpoint: 'https://testappconf555.azconfig.io'
+          ConfigurationFile: 'app_config.json'
+          Strict: false
       # - task: AzureAppConfiguration@7
       #   inputs:
       #     azureSubscription: 'AzureSubscriptionConnectionName'
@@ -59,9 +59,9 @@ jobs:
         displayName: Build and push an image to container registry
         inputs:
           containerRegistry: $(azure_container_registry)
-          repository: 'DevRepository'
+          repository: 'devrepositoryimage'
           command: 'buildAndPush'
-          Dockerfile: '**/Dockerfile'
+          Dockerfile: 'WebApplication1/Dockerfile'
           buildContext: '.'
           tags: 'latest'
 
@@ -69,7 +69,7 @@ jobs:
         inputs:
           azureSubscription: 'AzureSubscriptionConnectionName'
           appName: '$(PL_BACK_APP_NAME)'
-          containers: 'DevContainerRegistry1.azurecr.io/DevRepository:latest'
+          containers: 'devcontainerregistry1.azurecr.io/devrepositoryimage:latest'
 
       - task: Bash@3
         inputs:

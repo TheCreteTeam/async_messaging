@@ -2,7 +2,7 @@
 using AsyncMessagingCommon.Entities;
 using MassTransit;
 
-namespace WebApplication1.Data;
+namespace WebApplication2.Data;
 
 public class ApplicationDbContext: DbContext
 {

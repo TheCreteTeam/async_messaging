@@ -5,11 +5,13 @@ using Coravel.Events.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Paramore.Brighter;
 using Paramore.Brighter.Extensions.DependencyInjection;
 using Polly;
 using Polly.Registry;
+using WebApplication1.Data;
 using WebApplication1.Handlers;
 using WebApplication1.Services;
 using WebApplication1.Services.Definitions;
@@ -93,7 +95,7 @@ builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "v1.0.2",
+        Version = "v1.0.3",
         Title = "Test API",
         Description = "A test ASP.NET Core Web API",
         TermsOfService = new Uri("https://example.com/terms"),
@@ -160,15 +162,66 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumers(entryAssembly);
     // x.AddSagaStateMachines(entryAssembly);
     // x.AddSagas(entryAssembly);
-    // x.AddActivities(entryAssembly);
-
-    x.UsingInMemory((context, cfg) =>
+    x.AddActivities(entryAssembly);
+    
+    // https://masstransit.io/documentation/configuration/middleware/outbox
+    x.AddEntityFrameworkOutbox<ApplicationDbContext>(o =>
     {
+        // o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
+        o.QueryDelay = TimeSpan.FromSeconds(15);
+        o.UsePostgres();
+        // o.UseSqlServer();
+        // enable the bus outbox
+        o.UseBusOutbox();
+    });
+    
+    x.UsingPostgres((context, cfg) =>
+    {
+        cfg.UseDbMessageScheduler();
+    
         cfg.ConfigureEndpoints(context);
     });
+    
+    // add db bus
+    // x.AddStateObserver<RegistrationStateMachine, RegistrationState, MessageConsumerDefinition>()
+    //     .EntityFrameworkRepository(r =>
+    //     {
+    //         r.ExistingDbContext<ApplicationDbContext>();
+    //         r.UsePostgres();
+    //     });
+    
+    // x.UsingInMemory((context, cfg) =>
+    // {
+    //     // other options in ConfigureConsumer class
+    //     cfg.ConfigureEndpoints(context);
+    // });
+    
+    // The outbox can also be added to all consumers using a configure endpoints callback
+    // x.AddConfigureEndpointsCallback((context, name, cfg) =>
+    // {
+    //     cfg.UseEntityFrameworkOutbox<ApplicationDbContext>(context);
+    // });
 });
+builder.Services.AddOptions<SqlTransportOptions>().Configure(options =>
+{
+    options.Host = "host.docker.internal";
+    options.Database = "AsyncMessageDb";
+    options.Schema = "transport"; // the schema for the transport-related tables, etc. 
+    options.Role = "transport";   // the role to assign for all created tables, functions, etc.
+    options.Username = "postgres";  // the application-level credentials to use
+    options.Password = "jijikos";
+    options.AdminUsername = "postgres"; // the admin credentials to create the tables, etc.
+    options.AdminPassword = "jijikos";
+});
+builder.Services.AddPostgresMigrationHostedService(create: true, delete: false);
+
+
 // Wolverine
 builder.Host.UseWolverine();
+
+// Initialise DB context
+builder.Services.AddTransient<DbInitialiser>();
+
 
 var app = builder.Build();
 
@@ -202,6 +255,17 @@ string asciiArt = @"
     ";
 logger.LogInformation(asciiArt);
 
+var sdkVersion = System.Reflection.Assembly
+    .GetEntryAssembly()?
+    .GetCustomAttribute<System.Reflection.AssemblyFileVersionAttribute>()?
+    .Version;
+
+logger.LogInformation($"SDK Version: {sdkVersion}");
+
+
+var testConfVar = Environment.GetEnvironmentVariable("TEST_CONF_VAR");
+logger.LogInformation($"TEST_CONF_VAR: {testConfVar}");
+
 app.UseHsts();
 app.Use(async (context, next) =>
 {
@@ -228,11 +292,17 @@ app.Services.UseScheduler(scheduler =>
         .Cron(msgPublishCron ?? "*/1 * * * *");
 });
 
+// Brighter
 var provider = app.Services;
 IEventRegistration registration = provider.ConfigureEvents();
 registration
     .Register<PostCreated>()
     .Subscribe<PostListener>();
 
+// Initialise DB
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var initialiser = services.GetRequiredService<DbInitialiser>();
+initialiser.Run();
 
 app.Run();
