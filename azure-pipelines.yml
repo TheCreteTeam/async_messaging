@@ -61,7 +61,7 @@ jobs:
           containerRegistry: $(azure_container_registry)
           repository: 'devrepositoryimage'
           command: 'buildAndPush'
-          Dockerfile: '**/Dockerfile'
+          Dockerfile: 'WebApplication1/Dockerfile'
           buildContext: '.'
           tags: 'latest'
 
