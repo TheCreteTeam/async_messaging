@@ -6,6 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-WebApplication1-8DF72197-782F-4CB7-AED3-C2CE72E54B80</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <OutputType>Exe</OutputType>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     </PropertyGroup>
 
     <ItemGroup>
