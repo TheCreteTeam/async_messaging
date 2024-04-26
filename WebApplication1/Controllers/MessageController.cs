@@ -43,17 +43,23 @@ public class MessageController : ControllerBase
         var messageEntity = new AppMessage
         {
             Text = message,
-            TimeStamp = DateTime.Now
+            TimeStamp = DateTime.Now.ToUniversalTime(),
+            MailSent = 0,
+            Guid = Guid.NewGuid()
         };
         
         // save to db context
-        _dbContext.AppMessages.Add(messageEntity);
-        await _dbContext.SaveChangesAsync();
-        _logger.LogInformation("Message saved to db context.");
-        
+        // start transaction
+        // Transaction not used by Chapsas or MassTransit demo app ???
+        // await _dbContext.Database.BeginTransactionAsync();
+        _dbContext.AppMessages?.Add(messageEntity);
         await _bus.Publish(new CreateMessage(messageEntity));
+        await _dbContext.SaveChangesAsync();
+        // await _dbContext.Database.CommitTransactionAsync();
         
-        await _messageService.SendMessageToAzureStorageQueue(message);
+        _logger.LogInformation("Message {Message} saved to db context", message);
+        
+        // await _messageService.SendMessageToAzureStorageQueue(message);
         return Ok();
     }
 

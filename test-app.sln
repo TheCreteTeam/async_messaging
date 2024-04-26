@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebAppli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncMessagingCommon", "AsyncMessagingCommon\AsyncMessagingCommon.csproj", "{2C29AC1E-3D5E-40A3-A9EA-EBF9B7BAFE40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{B77CFD52-E308-4162-AA4E-48CE4ED04CA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2C29AC1E-3D5E-40A3-A9EA-EBF9B7BAFE40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C29AC1E-3D5E-40A3-A9EA-EBF9B7BAFE40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C29AC1E-3D5E-40A3-A9EA-EBF9B7BAFE40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B77CFD52-E308-4162-AA4E-48CE4ED04CA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B77CFD52-E308-4162-AA4E-48CE4ED04CA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B77CFD52-E308-4162-AA4E-48CE4ED04CA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B77CFD52-E308-4162-AA4E-48CE4ED04CA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

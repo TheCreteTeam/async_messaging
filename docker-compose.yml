@@ -1,0 +1,66 @@
+version: "3.9"
+# docker-compose -f docker-compose.yml up -d
+services:
+  webApp1:
+    container_name: webApp1
+    build:
+      context: .
+      dockerfile: WebApplication1/Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "8081:443"
+    environment:
+      # ASPNETCORE_DATA_PROTECTION_KEY_PATH=/data_protection_keys/;ASPNETCORE_Kestrel__Certificates__Default__Password=jijikos;ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx;ASPNETCORE_URLS=https://+\;http://+;AZURE_CLIENT_ID=5546ea8f-28d2-4a8f-af5c-efa637586026;AZURE_CLIENT_SECRET=jSM8Q~h0HS-N_qDyt.ynunbaX4T..V7iwWv_QbWT;AZURE_STORAGE_CONNECTION_STRING=;AZURE_STORAGE_QUEUE_NAME=queue01;AZURE_STORAGE_URI=https://teststoragex01.queue.core.windows.net/queue01;AZURE_TENANT_ID=6498607f-c00c-41cb-a637-097c2b0afebe;DEVELOPER_MODE=true
+        ASPNETCORE_DATA_PROTECTION_KEY_PATH: /data_protection_keys/
+        ASPNETCORE_Kestrel__Certificates__Default__Password: jijikos
+        ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+        ASPNETCORE_URLS: https://+;http://+
+        AZURE_CLIENT_ID: 5546ea8f-28d2-4a8f-af5c-efa637586026
+        AZURE_CLIENT_SECRET: jSM8Q~h0HS-N_qDyt.ynunbaX4T..V7iwWv_QbWT 
+        AZURE_STORAGE_CONNECTION_STRING:
+        AZURE_STORAGE_QUEUE_NAME: queue01
+        AZURE_STORAGE_URI: https://teststoragex01.queue.core.windows.net/queue01
+        AZURE_TENANT_ID: 6498607f-c00c-41cb-a637-097c2b0afebe
+        DEVELOPER_MODE: "true"
+    volumes:
+        - C:\Users\kostas\.aspnet\https\:/https/
+        - C:\temp-keys\:/data_protection_keys/
+
+  webApp2:
+    container_name: webApp2
+    build:
+      context: .
+      dockerfile: WebApplication2/Dockerfile
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_Kestrel__Certificates__Default__Password: jijikos
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+      ASPNETCORE_URLS: https://+;http://+
+    ports:
+      - "8082:443"
+    volumes:
+      - C:\Users\kostas\.aspnet\https\:/https/
+      - C:\temp-keys\:/data_protection_keys/
+  db:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: jijikos
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+  pgAdmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"

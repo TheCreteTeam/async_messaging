@@ -11,6 +11,7 @@ public class PostListener : IListener<PostCreated>
     
     public async Task HandleAsync(PostCreated broadcasted)
     {
-        _logger.LogInformation($"Event broadcasted: {broadcasted.message}");
+        _logger.LogInformation("Event broadcasted: {BroadcastedMessage}", broadcasted.message);
+        await Task.Delay(500);
     }
 }

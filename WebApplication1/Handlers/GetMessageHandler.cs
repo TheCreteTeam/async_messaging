@@ -1,5 +1,4 @@
 ﻿using AsyncMessagingCommon.Commands;
-using MassTransit;
 using Paramore.Brighter;
 using Paramore.Brighter.Policies.Attributes;
 
